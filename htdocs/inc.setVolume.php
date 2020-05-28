@@ -3,7 +3,15 @@ Volume Select Form
 -->
         <!-- input-group -->
         <?php
-        $maxvalueselect = round(($maxvolumevalue/5))*5;
+		if ($maxvolumevalue <= $maxvolumetempvalue)
+		{
+		    $maxvalueselect = round(($maxvolumevalue/5))*5;
+		}
+		else
+		{
+		    $maxvalueselect = round(($maxvolumetempvalue/5))*5;
+		}
+
         ?>
         <div class="col-md-4 col-sm-6">
             <div class="row" style="margin-bottom:1em;">

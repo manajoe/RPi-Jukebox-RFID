@@ -15,6 +15,11 @@ fi
 
 cat $PATHDATA/../settings/global.conf
 
+if [ "${AUDIOVOLMAXTEMP}" != "100" ]; then
+     /home/pi/RPi-Jukebox-RFID/scripts/playout_controls.sh -c=setmaxvolumetemp -v=100
+echo 'TEMP' >> /home/pi/test.txt 
+fi
+
 echo
 echo ${AUDIOVOLSTARTUP}
 

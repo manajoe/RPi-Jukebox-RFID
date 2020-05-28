@@ -117,6 +117,7 @@ include("inc.setLanguage.php");
 <?php
 include("inc.setVolume.php");
 include("inc.setMaxVolume.php");
+include("inc.setMaxVolumeTemp.php");
 include("inc.setVolumeStep.php");
 include("inc.setStartupVolume.php");
 ?>

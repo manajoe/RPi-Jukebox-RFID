@@ -160,6 +160,7 @@ $WlanIpMailAddr = $globalConf['MAILWLANIPADDR'];
 $version = $globalConf['VERSION'];
 $edition = $globalConf['EDITION'];
 $maxvolumevalue = $globalConf['AUDIOVOLMAXLIMIT'];
+$maxvolumetempvalue = $globalConf['AUDIOVOLMAXTEMP'];
 $startupvolumevalue = $globalConf['AUDIOVOLSTARTUP'];
 $volstepvalue = $globalConf['AUDIOVOLCHANGESTEP'];
 $idletimevalue = $globalConf['IDLETIMESHUTDOWN'];
@@ -200,6 +201,7 @@ $nonEmptyCommands = array(
     'stop',
     'volume',
     'maxvolume',
+	'maxvolumetemp',
     'startupvolume',
     'volstep',
     'shutdown',
@@ -302,6 +304,7 @@ if(isset($_GET['delete']) && $_GET['delete'] == "delete") {
 $commandToAction = array(
     'volume' => "/usr/bin/sudo ".$conf['scripts_abs']."/playout_controls.sh -c=setvolume -v=%s",            // change volume
     'maxvolume' => "/usr/bin/sudo ".$conf['scripts_abs']."/playout_controls.sh -c=setmaxvolume -v=%s",      // change max volume
+    'maxvolumetemp' => "/usr/bin/sudo ".$conf['scripts_abs']."/playout_controls.sh -c=setmaxvolumetemp -v=%s",      // change max volume temp
     'startupvolume' => "/usr/bin/sudo ".$conf['scripts_abs']."/playout_controls.sh -c=setstartupvolume -v=%s",      // change startup volume
     'volstep' => "/usr/bin/sudo ".$conf['scripts_abs']."/playout_controls.sh -c=setvolstep -v=%s",          // change volume step
     'mute' => "/usr/bin/sudo ".$conf['scripts_abs']."/playout_controls.sh -c=mute",                         // volume mute (toggle)
