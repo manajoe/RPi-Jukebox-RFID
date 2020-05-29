@@ -27,6 +27,7 @@ NOW=`date +%Y-%m-%d.%H:%M:%S`
 # mute
 # setvolume
 # setmaxvolume
+# setmaxvolumetemp
 # setstartupvolume
 # getstartupvolume
 # setvolumetostartup
@@ -34,6 +35,7 @@ NOW=`date +%Y-%m-%d.%H:%M:%S`
 # volumedown
 # getvolume
 # getmaxvolume
+# getmaxvolumetemp
 # setvolstep
 # getvolstep
 # playerstop

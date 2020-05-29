@@ -88,8 +88,6 @@ AUDIOVOLCHANGESTEP=`cat $PATHDATA/../settings/Audio_Volume_Change_Step`
 ##############################################
 
 # set Max_Volume_Limit only temporarily to reset it after next startup
-#AUDIOVOLMAXTEMP="TRUE"
-#AUDIOVOLMAXTEMP="FALSE"
 # 1. create a default if file does not exist
 if [ ! -f $PATHDATA/../settings/Max_Volume_Limit_Temp ]; then
     echo "100" > $PATHDATA/../settings/Max_Volume_Limit_Temp
@@ -230,6 +228,7 @@ VERSION=`cat $PATHDATA/../settings/version`
 # AUDIOIFACENAME
 # AUDIOVOLCHANGESTEP
 # AUDIOVOLMAXLIMIT
+# AUDIOVOLMAXTEMP
 # AUDIOVOLMINLIMIT
 # AUDIOVOLSTARTUP
 # VOLCHANGEIDLE
@@ -252,7 +251,6 @@ echo "AUDIOIFACENAME=\"${AUDIOIFACENAME}\"" >> "${PATHDATA}/../settings/global.c
 echo "AUDIOVOLCHANGESTEP=\"${AUDIOVOLCHANGESTEP}\"" >> "${PATHDATA}/../settings/global.conf"
 echo "AUDIOVOLMAXLIMIT=\"${AUDIOVOLMAXLIMIT}\"" >> "${PATHDATA}/../settings/global.conf"
 echo "AUDIOVOLMAXTEMP=\"${AUDIOVOLMAXTEMP}\"" >> "${PATHDATA}/../settings/global.conf"
-#echo "AUDIOVOLMAXTEMP=\"TRUE\"" >> "${PATHDATA}/../settings/global.conf"
 echo "AUDIOVOLMINLIMIT=\"${AUDIOVOLMINLIMIT}\"" >> "${PATHDATA}/../settings/global.conf"
 echo "AUDIOVOLSTARTUP=\"${AUDIOVOLSTARTUP}\"" >> "${PATHDATA}/../settings/global.conf"
 echo "VOLCHANGEIDLE=\"${VOLCHANGEIDLE}\"" >> "${PATHDATA}/../settings/global.conf"
