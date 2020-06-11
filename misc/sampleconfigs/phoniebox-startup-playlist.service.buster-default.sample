@@ -1,0 +1,15 @@
+[Unit]  
+Description=Phoniebox Startup Playlist
+After=network.target iptables.service firewalld.service rfid-reader.service
+
+[Service]
+User=pi
+Group=pi
+Type=oneshot
+RemainAfterExit=true
+WorkingDirectory=/home/pi/RPi-Jukebox-RFID
+ExecStart=/home/pi/RPi-Jukebox-RFID/scripts/rfid_trigger_play.sh -i=9999000001
+
+[Install]
+WantedBy=multi-user.target
+

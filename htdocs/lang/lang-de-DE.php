@@ -1,6 +1,5 @@
 <?php
 $lang = array();
-
 $lang['globalEdit'] = "Bearbeiten";
 $lang['globalResume'] = "Fortsetzen";
 $lang['globalPassword'] = "Passwort";
@@ -66,8 +65,6 @@ $lang['globalLoop'] = "Schleife";
 $lang['globalLang'] = "Sprache";
 $lang['globalLanguageSettings'] = "Spracheinstellungen";
 $lang['globalPriority'] = "Priorität";
-
-// Player title HTML
 $lang['playerSeekBack'] = "seek back";
 $lang['playerSeekAhead'] = "seek forward";
 $lang['playerSkipPrev'] = "previous track";
@@ -79,32 +76,22 @@ $lang['playerStop'] = "stop player";
 $lang['playerVolDown'] = "volume down";
 $lang['playerVolUp'] = "volume up";
 $lang['playerMute'] = "toggle mute";
-
-// Edition (classic, +spotify)
 $lang['globalEdition'] = "Edition";
 $lang['classic'] = "Classic edition (barebones)";
 $lang['plusSpotify'] = "Plus Edition (feat. Spotify Integration)";
-
 $lang['navEditionClassic'] = "Classic";
 $lang['navEditionPlusSpotify'] = "+Spotify";
-
 $lang['navBrand'] = "Phoniebox";
 $lang['navHome'] = "Home";
 $lang['navSettings'] = "Einstellungen";
 $lang['navInfo'] = "Info";
 $lang['navShutdown'] = "Herunterfahren";
 $lang['navReboot'] = "Neustart";
-
 $lang['indexAvailAudio'] = "Verfügbare Medien";
 $lang['indexContainsFiles'] = "Enthält die folgenden Dateien:";
 $lang['indexShowFiles'] = "Dateien anzeigen";
 $lang['indexManageFilesChips'] = "Dateien und Chips verwalten";
-
 $lang['Spotify'] = "Spotify";
-
-/*
-* Register & Edit Cards
-*/
 $lang['cardRegisterTitle'] = "Neue Karte hinzufügen";
 $lang['cardEditTitle'] = "Karte bearbeiten oder hinzufügen";
 $lang['cardRegisterMessageDefault'] = "Der Wert 'Zuletzt verwendete Karten-ID' im Formular wird beim Durchziehen einer RFID-Karte sofort aktualisiert.<br/>(Erfordert die Aktivierung von Javascript im Browser.)";
@@ -122,10 +109,6 @@ $lang['cardRegisterFolder2Card'] = "Audio-Ordner ist nun mit der Karten-ID verkn
 $lang['cardRegisterDownloadingYT'] = "<p>YouTube Audio wird heruntergeladen. Dies kann einige Minuten dauern. Du kannst die Logdatei \"youtube-dl.log\" im Ordner \"shared\" ansehen.</p>";
 $lang['cardRegisterSwipeUpdates'] = "Dies wird automatisch aktualisiert, wenn du eine RFID-Karte ausliest.";
 $lang['cardRegisterManualLinks'] = "<p>Du kannst Karten auch manuell mit Ordnern verbinden. Das Handbuch erklärt, wie man sich <a href='https://github.com/MiczFlor/RPi-Jukebox-RFID/wiki/MANUAL#connecting-to-the-phoniebox-to-add-files' target='-blank'>mit der Phoniebox verbindet</a> und <a href='https://github.com/MiczFlor/RPi-Jukebox-RFID/wiki/MANUAL#registering-cards-manually-through-samba-without-the-web-app' target='_blank'>Karten registriert</a>.</p>";
-
-/*
-* Card edit form
-*/
 $lang['cardFormFolderLegend'] = "Audio-Ordner";
 $lang['cardFormFolderLabel'] = "a) Karte mit Audio-Ordner verbinden";
 $lang['cardFormFolderSelectDefault'] = "Keiner (--Wählen-- zur Auswahl eines Ordners)";
@@ -145,10 +128,6 @@ $lang['cardFormYTFolderPlaceholder'] = "z.B. 'Neuer Ordner'";
 $lang['cardFormYTFolderHelp'] = "Name für den Audio-Ordner, der das YouTube-Audio enthält";
 $lang['cardFormYTHelp'] = "Füge die volle YouTube-URL wie im Beispiel hinzu";
 $lang['cardFormRemoveCard'] = "Karten-ID entfernen";
-
-/*
-* Track edit form
-*/
 $lang['trackEditTitle'] = "Track-Management";
 $lang['trackEditInformation'] = "Track-Informationen";
 $lang['trackEditMove'] = "Track verschieben";
@@ -159,11 +138,6 @@ $lang['trackEditDeleteLabel'] = "Möchtest du wirklich löschen?";
 $lang['trackEditDeleteHelp'] = "Es gibt kein Rückgängigmachen für gelöschte Dateien. Sie sind weg! Bist du sicher?";
 $lang['trackEditDeleteNo'] = "Diesen Track NICHT löschen";
 $lang['trackEditDeleteYes'] = "Ja, diesen Track LÖSCHEN";
-
-
-/*
-* Settings
-*/
 $lang['settingsVolChangePercent'] = "Lautst. Änderung";
 $lang['settingsMaxVol'] = "Max. Lautstärke";
 $lang['settingsWifiRestart'] = "Die Änderungen an der WiFi-Verbindung erfordern einen Neustart, um wirksam zu werden";
@@ -182,19 +156,14 @@ $lang['settingsCoverInfo'] = "Willst du Cover neben den Alben und Playlisten auf
 $lang['settingsShowCoverON'] = "Cover anzeigen";
 $lang['settingsShowCoverOFF'] = "Kein Cover anzeigen";
 $lang['settingsMessageLangfileNewItems'] = "Es gibt neue Sprachelemente in der originalen Sprachdatei <em>lang-en-UK.php</em>. Möglicherweise möchtest du deine Sprachdatei aktualisieren und Ihre Änderungen in den Phoniebox-Code übernehmen? :)";
-
-/*
-* System info
-*/
 $lang['infoOsDistrib'] = "Betriebssystem";
 $lang['infoOsCodename'] = "Codename";
 $lang['infoStorageUsed'] = "Speicherverbrauch";
 $lang['infoMopidyStatus'] = "Mopidy Server Status";
 $lang['infoMPDStatus'] = "MPD Server Status";
-
-/*
-* Folder Management and File Upload
-*/
+$lang['infoDebugLogTail'] = "<b>DEBUG log file</b>: Last 40 lines";
+$lang['infoDebugLogClear'] = "Clear all content from debug.log";
+$lang['infoDebugLogSettings'] = "Debug Log Settings";
 $lang['manageFilesFoldersTitle'] = "Ordner &amp; Dateien";
 $lang['manageFilesFoldersUploadFilesLabel'] = "Dateien von deinem Laufwerk auswählen";
 $lang['manageFilesFoldersUploadLegend'] = "Dateien hochladen";
@@ -210,10 +179,7 @@ $lang['manageFilesFoldersErrorNewFolderExists'] = "<p>Ein Ordner mit diesem Name
 $lang['manageFilesFoldersErrorNewFolderNotParent'] = "<p>Der übergeordnete Ordner existiert nicht.</p>";
 $lang['manageFilesFoldersSuccessNewFolder'] = "Neuer Ordner erstellt: ";
 $lang['manageFilesFoldersSelectDefault'] = "--Wählen--, um einen Ordner auszuwählen und/oder einen neuen Unterordner zu erstellen";
-
 $lang['manageFilesFoldersRenewDB'] = "Datenbank erneuern";
 $lang['manageFilesFoldersLocalScan'] = "Musikbibliothek scannen";
 $lang['manageFilesFoldersRenewDBinfo'] = "Bitte scanne deine Musikbibliothek, nachdem du neue Dateien hochgeladen oder Ordner verschoben hast. Der Scan ist nicht notwendig, um Musik zu hören, aber es ist notwendig, um Track-Informationen in der Web-Oberfläche zu sehen. Es werden nur neue oder verschobene Dateien gescannt. Während der Scan läuft, wird Mopidy gestoppt. Nach Abschluss des Scans startet Mopidy automatisch neu. Den Serverstatus siehst du im Abschnitt Info.";
-
-
 ?>
