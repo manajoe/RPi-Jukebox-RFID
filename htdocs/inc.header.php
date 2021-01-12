@@ -1,4 +1,6 @@
 <?php
+namespace JukeBox;
+
 /**************************************************
 * VARIABLES
 * No changes required if you stuck to the
@@ -20,7 +22,7 @@ if(!file_exists("config.php")) {
         // no config nor sample config found. die.
         print "<h1>Configuration file not found</h1>
             <p>The files 'config.php' and 'config.php.sample' were not found in the
-            directory 'htdocs'. Please download 'htdocs/config.php.sample' from the 
+            directory 'htdocs'. Please download 'htdocs/config.php.sample' from the
             <a href='https://github.com/MiczFlor/RPi-Jukebox-RFID/'>online repository</a>,
             copy it locally to 'htdocs/config.php' and then adjust it to fit your system.</p>";
         die;
@@ -40,7 +42,7 @@ sudo chmod -R 775 htdocs/
 sudo chgrp -R www-data htdocs/
                 </pre>
                 </p>
-                Alternatively, download 'htdocs/config.php.sample' from the 
+                Alternatively, download 'htdocs/config.php.sample' from the
                 <a href='https://github.com/MiczFlor/RPi-Jukebox-RFID/'>online repository</a>,
                 copy it locally to 'htdocs/config.php' and then adjust it to fit your system.</p>";
             die;
@@ -61,8 +63,8 @@ include("config.php");
 * this file is read by shell scripts and php
 */
 $debugAvail = array(
-"DEBUG_WebApp", 
-"DEBUG_WebApp_API", 
+"DEBUG_WebApp",
+"DEBUG_WebApp_API",
 "DEBUG_inc_readArgsFromCommandLine_sh",
 "DEBUG_inc_settingsFolderSpecific_sh",
 "DEBUG_inc_writeFolderConfig_sh",
@@ -93,9 +95,9 @@ $debugLoggingConf = parse_ini_file("../settings/debugLogging.conf");
 */
 if($debugLoggingConf['DEBUG_WebApp'] == "TRUE") {
     $debug = "true"; // true or false
+} else {
+    $debug = "false";
 }
-
-
 
 $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://';
 $url_abs = $protocol.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']; // URL to PHP_SELF
@@ -111,19 +113,13 @@ function execAndRedirect($exec)
     if (!isset($exec)) {
         return;
     }
-
+    $res = exec($exec);
     if ($debug == "true") {
-        print "Command in execAndRedirect: " . $exec;
-    } else {
-        $res = exec($exec);
-        //if ($debug == "true") {
-            print "Command in execAndRedirect: " . $exec;
-            print "Result: " . $res;
-        //}
-        /* redirect to drop all the url parameters */
-        header("Location: " . $url_abs);
-        exit;
+        print "<pre>\nCommand in execAndRedirect: " . $exec . "\nResult: " . $res . "\n</pre>";
     }
+    /* redirect to drop all the url parameters */
+    header("Location: " . $url_abs);
+    exit;
 }
 
 function fileGetContentOrDefault($filename, $defaultValue)
@@ -146,9 +142,9 @@ $conf['settings_abs'] = realpath(getcwd().'/../settings/');
 if(!file_exists($conf['settings_abs']."/global.conf")) {
     // execute shell to create config file
     // scripts/inc.writeGlobalConfig.sh
-    exec($conf['scripts_abs']."/inc.writeGlobalConfig.sh");
-    exec("chmod 777 ".$conf['settings_abs']."/global.conf");
-} 
+    exec("sudo ".$conf['scripts_abs']."/inc.writeGlobalConfig.sh");
+    exec("sudo chmod 777 ".$conf['settings_abs']."/global.conf");
+}
 
 // read the global conf file
 $globalConf = parse_ini_file($conf['settings_abs']."/global.conf", $process_sections = null);
@@ -156,11 +152,21 @@ $globalConf = parse_ini_file($conf['settings_abs']."/global.conf", $process_sect
 
 // assign the values from the global conf file to the vars in PHP
 $Audio_Folders_Path = $globalConf['AUDIOFOLDERSPATH'];
+$Playlists_Folders_Path = $globalConf['PLAYLISTSFOLDERPATH'];
 $Second_Swipe = $globalConf['SECONDSWIPE'];
+$Second_Swipe_Pause = $globalConf['SECONDSWIPEPAUSE'];
+$Second_Swipe_Pause_Controls = $globalConf['SECONDSWIPEPAUSECONTROLS'];
+$VolumeManager = $globalConf['VOLUMEMANAGER'];
 $ShowCover = $globalConf['SHOWCOVER'];
+$WlanIpReadYN = $globalConf['READWLANIPYN'];
+$WlanIpMailYN = $globalConf['MAILWLANIPYN'];
+$WlanIpMailAddr = $globalConf['MAILWLANIPADDR'];
 $version = $globalConf['VERSION'];
 $edition = $globalConf['EDITION'];
 $maxvolumevalue = $globalConf['AUDIOVOLMAXLIMIT'];
+$startupvolumevalue = $globalConf['AUDIOVOLSTARTUP'];
+$volstepvalue = $globalConf['AUDIOVOLCHANGESTEP'];
+$idletimevalue = $globalConf['IDLETIMESHUTDOWN'];
 $conf['settings_lang'] = $globalConf['LANG'];
 
 // vars that must be read continuously and can't be in the global conf file
@@ -170,17 +176,6 @@ $Latest_Folder_Played = trim(file_get_contents($conf['settings_abs'].'/Latest_Fo
 * load language strings
 */
 include("inc.langLoad.php");
-//<<<<<<< HEAD
-/*=======
-$Second_Swipe = trim(file_get_contents($conf['settings_abs'].'/Second_Swipe'));
-$ShowCover = fileGetContentOrDefault($conf['settings_abs'].'/ShowCover', "ON");
-$version = trim(file_get_contents($conf['settings_abs'].'/version'));
-$edition = fileGetContentOrDefault(dirname(__FILE__).'/../settings/edition', "classic");
-/*
-* load language strings
-*/
-//$conf['settings_lang'] = fileGetContentOrDefault($conf['settings_abs'].'/Lang', "en-UK");
-//>>>>>>> 7ef4a568abfc0e0c97cd0ffd954fa3e5ce54b240
 
 /*******************************************
 * URLPARAMETERS
@@ -197,6 +192,7 @@ $nonEmptyCommands = array(
     'stop',
     'volume',
     'maxvolume',
+    'startupvolume',
     'volstep',
     'shutdown',
     'reboot',
@@ -227,7 +223,8 @@ $commandsWithAllowedValues = array(
     'volumeup' => array('true'),
     'volumedown' => array('true'),
     'rfidstatus' => array('turnon', 'turnoff'),
-    'gpiostatus' => array('turnon', 'turnoff'),
+    'WlanIpMailYN' => array('turnon', 'turnoff'),
+    'gpiostatus' => array('turnon', 'turnoff')
 );
 foreach ($commandsWithAllowedValues as $command => $allowedValues) {
     if(isset($_GET[$command]) && in_array(trim($_GET[$command]), $allowedValues)) {
@@ -239,8 +236,9 @@ foreach ($commandsWithAllowedValues as $command => $allowedValues) {
 }
 
 if ($debug == "true") {
-    print "urlparams: ";
-    print "<pre>"; print_r($urlparams); print "</pre>";
+    print "<pre>urlparams: \n"; print_r($urlparams); print "</pre>";
+    print "<pre>_POST: \n"; print_r($_POST); print "</pre>";
+    print "<pre>_FILES: \n"; print_r($_FILES); print "</pre>";
 }
 
 /*******************************************
@@ -263,11 +261,17 @@ if(isset($_POST['streamType']) && $_POST['streamType'] != "" && $_POST['streamTy
 if(isset($_POST['audiofolder']) && $_POST['audiofolder'] != "" && $_POST['audiofolder'] != "false" && file_exists($Audio_Folders_Path.'/'.$_POST['audiofolder'])) {
     $post['audiofolder'] = $_POST['audiofolder'];
 }
+if(isset($_POST['audiofolderNew']) && $_POST['audiofolderNew'] != "" && $_POST['audiofolderNew'] != "false") {
+    $post['audiofolderNew'] = $_POST['audiofolderNew'];
+}
 if(isset($_POST['YTstreamURL']) && $_POST['YTstreamURL'] != "") {
     $post['YTstreamURL'] = $_POST['YTstreamURL'];
 }
 if(isset($_POST['YTstreamFolderName']) && $_POST['YTstreamFolderName'] != "") {
     $post['YTstreamFolderName'] = $_POST['YTstreamFolderName'];
+}
+if(isset($_POST['TriggerCommand']) && $_POST['TriggerCommand'] != "false") {
+    $post['TriggerCommand'] = $_POST['TriggerCommand'];
 }
 if(isset($_POST['YTaudiofolder']) && $_POST['YTaudiofolder'] != "" && $_POST['YTaudiofolder'] != "false" && file_exists($Audio_Folders_Path.'/'.$_POST['YTaudiofolder'])) {
     $post['YTaudiofolder'] = $_POST['YTaudiofolder'];
@@ -282,7 +286,6 @@ if(isset($_GET['delete']) && $_GET['delete'] == "delete") {
     $post['delete'] = $_GET['delete'];
 }
 
-
 /*******************************************
 * ACTIONS
 *******************************************/
@@ -290,6 +293,7 @@ if(isset($_GET['delete']) && $_GET['delete'] == "delete") {
 $commandToAction = array(
     'volume' => "/usr/bin/sudo ".$conf['scripts_abs']."/playout_controls.sh -c=setvolume -v=%s",            // change volume
     'maxvolume' => "/usr/bin/sudo ".$conf['scripts_abs']."/playout_controls.sh -c=setmaxvolume -v=%s",      // change max volume
+    'startupvolume' => "/usr/bin/sudo ".$conf['scripts_abs']."/playout_controls.sh -c=setstartupvolume -v=%s",      // change startup volume
     'volstep' => "/usr/bin/sudo ".$conf['scripts_abs']."/playout_controls.sh -c=setvolstep -v=%s",          // change volume step
     'mute' => "/usr/bin/sudo ".$conf['scripts_abs']."/playout_controls.sh -c=mute",                         // volume mute (toggle)
     'volumeup' => "/usr/bin/sudo ".$conf['scripts_abs']."/playout_controls.sh -c=volumeup",                 // volume up
@@ -316,8 +320,8 @@ $commandToAction = array(
         'turnoff' => "/usr/bin/sudo /bin/systemctl stop phoniebox-rfid-reader.service"                      // stop the rfid service
     ),
     'gpiostatus' => array(
-        'turnon' => "/usr/bin/sudo /bin/systemctl start phoniebox-gpio-buttons.service",                    // start the gpio button service
-        'turnoff' => "/usr/bin/sudo /bin/systemctl stop phoniebox-gpio-buttons.service"                     // stop the gpio button service
+        'turnon' => "/usr/bin/sudo /bin/systemctl start phoniebox-gpio-control.service",                    // start the gpio control service
+        'turnoff' => "/usr/bin/sudo /bin/systemctl stop phoniebox-gpio-control.service"                     // stop the gpio control service
     ),
     // control player through web interface
     'player' => array(
@@ -348,14 +352,13 @@ if(isset($urlparams['enableresume']) && $urlparams['enableresume'] != "" && is_d
     $exec = '/usr/bin/sudo '.$conf['scripts_abs'].'/resume_play.sh -c=enableresume -d="'.$urlparams['enableresume'].'"';
     if($debug == "true") {
         print "Command: ".$exec;
-    } else {
-        // pass folder to resume script
-        exec($exec);
-    
-        /* redirect to drop all the url parameters */
-        header("Location: ".$url_abs);
-        exit;
     }
+    // pass folder to resume script
+    exec($exec);
+
+    /* redirect to drop all the url parameters */
+    header("Location: ".$url_abs);
+    exit;
 }
 
 // disable resume
