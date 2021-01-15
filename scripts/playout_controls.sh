@@ -64,6 +64,7 @@ NOW=`date +%Y-%m-%d.%H:%M:%S`
 # recordstop
 # recordplaylatest
 # readwifiipoverspeaker
+# switchaudioiface
 
 # The absolute path to the folder whjch contains all the scripts.
 # Unless you are working with symlinks, leave the following line untouched.
@@ -91,6 +92,8 @@ fi
 # it will be created or deleted by this script
 VOLFILE=${PATHDATA}/../settings/Audio_Volume_Level
 
+# path to file storing the current audio iFace name
+IFACEFILE=${PATHDATA}/../settings/Audio_iFace_Name
 #############################################################
 
 # Get args from command line (see Usage above)
@@ -871,6 +874,36 @@ case $COMMAND in
         # delete older mp3 (in case process was interrupted)
         sudo rm WifiIp.mp3
         /usr/bin/php /home/pi/RPi-Jukebox-RFID/scripts/helperscripts/cli_ReadWifiIp.php
+        ;;
+switchaudioiface)
+        # will switch between primary/secondary audio iFace (e.g. speaker/headphones), if exist
+        dbg "   ${COMMAND}"
+        if [ "${VOLUMEMANAGER}" == "amixer" ]; then
+            NEXTAUDIOIFACE=$(((${AUDIOIFACEACTIVE}+1) % 2))
+            if [ -f ${IFACEFILE}_${NEXTAUDIOIFACE} ]; then
+                NEXTAUDIOIFACENAME=`<${IFACEFILE}_${NEXTAUDIOIFACE}`
+                if [ -f ${VOLFILE}_${NEXTAUDIOIFACE} ]; then
+                    NEXTAUDIOIFACEVOL=`<${VOLFILE}_${NEXTAUDIOIFACE}`
+                else
+                    NEXTAUDIOIFACEVOL=${AUDIOVOLMAXLIMIT}
+                fi
+                # store current volume
+                amixer sget \'${AUDIOIFACENAME}\' | grep -Po -m 1 '(?<=\[)[^]]*(?=%])' > ${VOLFILE}_${AUDIOIFACEACTIVE}
+                # unmute next audio iFace
+                amixer sset \'${NEXTAUDIOIFACENAME}\' ${NEXTAUDIOIFACEVOL}%
+                # mute current audio iFace
+                amixer sset \'${AUDIOIFACENAME}\' 0%
+                # store new active audio iFace
+                cp ${IFACEFILE}_${NEXTAUDIOIFACE} ${IFACEFILE}
+                echo "${NEXTAUDIOIFACE}" > ${PATHDATA}/../settings/Audio_iFace_Active
+                # create global config file because individual setting got changed (time consuming)
+                . ${PATHDATA}/inc.writeGlobalConfig.sh
+            else
+                dbg "Cannot switch audio iFace. ${IFACEFILE}_${NEXTAUDIOIFACE} does not exist."
+            fi
+        else
+            dbg "Command requires \"amixer\" as volume manager."
+        fi
         ;;
     *)
         echo Unknown COMMAND $COMMAND VALUE $VALUE
