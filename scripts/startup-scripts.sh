@@ -33,7 +33,7 @@ while [ "$STATUS" != "ACTIVE" ]; do STATUS=$(echo -e status\\nclose | nc -w 1 lo
 
 #########################################
 # set default audio output
-/home/pi/RPi-Jukebox-RFID/scripts/userscripts/switch_audio_v4.sh default
+/home/pi/RPi-Jukebox-RFID/scripts/userscripts/switch_audio_output.sh default
 
 ####################################
 # check if and set volume on startup
