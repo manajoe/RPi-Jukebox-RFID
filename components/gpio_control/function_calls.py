@@ -76,6 +76,9 @@ def functionCallPlayerSeekFwd(*args):
 def functionCallPlayerSeekBack(*args):
     function_call("{command} -c=playerseek -v=-10".format(command=playout_control), shell=True)
 
+def functionCallUserscript2(*args):
+    function_call("{command} -c=userscript2".format(command=playout_control),
+            shell=True)
 
 
 def getFunctionCall(functionName):

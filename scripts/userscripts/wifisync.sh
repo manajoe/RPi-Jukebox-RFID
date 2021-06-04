@@ -1,5 +1,5 @@
 #!/bin/bash
-		
+PATHDATA="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # If WiFi is enabled from the beginning, keep it enabled in the end
 rfkill list wifi | grep -i "Soft blocked: no" > /dev/null 2>&1
 WIFI_SOFTBLOCK_RESULT=$?
@@ -28,14 +28,24 @@ while ! ip route | grep -oP 'default via .+ dev wlan0'; do
   sleep 1;
 done
 
-# Wait 40 more seconds for the remote_server to be reachable 
-# sleep 40s
-#grep remote_server= /home/pi/sync.sh | awk -F'[""]' '{print $2}'
-#REMOTE_SERVER=$?
-#for i in {1..50}; do ping -c1 $REMOTE_SERVER >> /home/pi/wifi.log && break; done
-
+# if Idle Time is set, temporarily set to 0, as sync might take longer than idle time
+echo ${PATHDATA}/../../settings/Idle_Time_Before_Shutdown
+if [ -s ${PATHDATA}/../../settings/Idle_Time_Before_Shutdown ]
+then 
+IDLE_TIME=$(head -n 1 ${PATHDATA}/../../settings/Idle_Time_Before_Shutdown)
+echo $IDLE_TIME
+${PATHDATA}/../playout_controls.sh -c=setidletime -v=0
+${PATHDATA}/../playout_controls.sh -c=getidletime
+fi
 # Start Sync-Script
 /home/pi/sync.sh
+
+# Reset Idle Time to previous value if needed
+if [[ ! -z $IDLE_TIME ]]
+then
+${PATHDATA}/../playout_controls.sh -c=setidletime -v=$IDLE_TIME
+echo $IDLE_TIME
+fi
 
 # Deactivate WiFi if it was disabled in the beginning
 if [ $WIFI_STATUS_START -eq 0 ]; then

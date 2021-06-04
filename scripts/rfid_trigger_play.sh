@@ -274,6 +274,12 @@ if [ "$CARDID" ]; then
         $USERSCRIPT1)
             $PATHDATA/userscripts/wifisync.sh
             ;;
+        $USERSCRIPT2)
+            $PATHDATA/userscripts/switch_audio_output.sh
+            ;;
+        $USERSCRIPT3)
+            #$PATHDATA/userscripts/wifisync.sh
+            ;;
         *)
 
             # We checked if the card was a special command, seems it wasn't.

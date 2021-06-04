@@ -64,6 +64,9 @@ NOW=`date +%Y-%m-%d.%H:%M:%S`
 # recordstop
 # recordplaylatest
 # readwifiipoverspeaker
+# userscript1
+# userscript2
+# userscript3
 
 # The absolute path to the folder whjch contains all the scripts.
 # Unless you are working with symlinks, leave the following line untouched.
@@ -872,6 +875,15 @@ case $COMMAND in
         sudo rm WifiIp.mp3
         /usr/bin/php /home/pi/RPi-Jukebox-RFID/scripts/helperscripts/cli_ReadWifiIp.php
         ;;
+    userscript1)
+            $PATHDATA/userscripts/wifisync.sh
+            ;;
+    userscript2)
+            $PATHDATA/userscripts/switch_audio_output.sh
+            ;;
+    userscript3)
+            #$PATHDATA/userscripts/wifisync.sh
+;;
     *)
         echo Unknown COMMAND $COMMAND VALUE $VALUE
         if [ "${DEBUG_playout_controls_sh}" == "TRUE" ]; then echo "Unknown COMMAND ${COMMAND} VALUE ${VALUE}" >> ${PATHDATA}/../logs/debug.log; fi
